@@ -1,0 +1,19 @@
+services:
+  api:
+    build: .
+    container_name: user-management-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env                # copy .env.example to .env first
+    environment:
+      # Overrides DATABASE_URL from .env: SQLite file lives on the named volume below
+      DATABASE_URL: sqlite:////app/data/users.db
+    volumes:
+      - db_data:/app/data   # database survives container restarts / rebuilds
+      - app_logs:/app/logs
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  app_logs:
